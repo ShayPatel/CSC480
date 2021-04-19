@@ -589,6 +589,7 @@ def a_star(root:str,goal:str,h_func):
             
             for c in children:
                 heapq.heappush(heap,(
+                    #cost + h_func
                     current.total_cost + c[0] + h_func(c[1],goal), 
                     Node(
                         c[1], current.total_cost + c[0], current.path_length + 1, c[2], current
