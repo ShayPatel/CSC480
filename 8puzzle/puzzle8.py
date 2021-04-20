@@ -871,7 +871,7 @@ def st_compare_result(col,start:str,goal:str,search,show=True,output_limit=50,**
 
                 #print_state(start)
                 for i in reversed(solution):
-                    st.info(f"{i.path_length}. {i.move}, total_cost: {i.total_cost}")
+                    st.info(f"{i.path_length}. {i.move}, total cost: {i.total_cost}")
                     st.markdown(
                         st_state(i.state),
                         unsafe_allow_html=True
