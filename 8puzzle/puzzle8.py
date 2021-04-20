@@ -934,7 +934,15 @@ def st_compare(start:str,goal:str,strategies:list,output_limit=50,dfs_limit=40,s
             cols[i].success("a* with manhattan distance \* cost")
             st_compare_result(cols[i],start, goal, a_star, h_func=h_dist_cost, show=show, output_limit=output_limit)
 
-
+def valid_state(state:str):
+    if len(set(state)) != 9:
+        return False
+    try:
+        int(state)
+    except Exception:
+        return False
+    
+    return True
 
 ouput_limit = st.sidebar.select_slider("Output limit",range(101),value=50)
 #dfs_limit = st.sidebar.select_slider("DFS depth limit",range(101),value=40)
@@ -963,9 +971,7 @@ goal = goal.replace(" ","").strip()
 view_option = st.sidebar.radio("Views",["Summary","Compare"])
 
 if view_option == "Summary":
-    if len(set(start)) != 9 or len(set(goal)) != 9:
-        st.warning("Enter valid state values")
-    elif len(start) == 9 and len(goal) == 9:
+    if valid_state(start) and valid_state(goal):
         #st_results(s1, g, a_star, h_func=h_dist_cost)
         #st_summary(start,goal,show=True,output_limit=ouput_limit,dfs_limit=dfs_limit)
         st_summary(start,goal,show=True,output_limit=ouput_limit)
@@ -975,7 +981,7 @@ elif view_option == "Compare":
     #strategies = ["BFS","DFS","DFS limited","Uniform cost","Best first with misplaced tiles","Best first with manhattan distance","Best first with modified manhattan distance","a* with misplaced tiles","a* with manhattan distance","a* with modified manhattan distance"]
     strategies = ["BFS","DFS","Uniform cost","Best first with misplaced tiles","Best first with manhattan distance","Best first with modified manhattan distance","a* with misplaced tiles","a* with manhattan distance","a* with modified manhattan distance"]
     search_options = st.sidebar.multiselect("Search strategies",strategies)
-    if len(set(start)) != 9 or len(set(goal)) != 9:
+    if not valid_state(start) or not valid_state(goal):
         st.warning("Enter valid state values")
     elif not search_options:
         st.warning("Select search strategies")
