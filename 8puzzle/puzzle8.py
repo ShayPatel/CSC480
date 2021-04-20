@@ -2,8 +2,6 @@ from collections import deque
 import heapq
 import streamlit as st
 import pandas as pd
-from streamlit.caching import _get_output_hash
-import streamlit.components.v1 as components
 
 previous_states = set()
 
@@ -345,6 +343,7 @@ def DFS(root:str,goal:str):
 
 
 #cloned from DFS function
+#TODO: have to find way to remove visited states from set if backtracking
 def DFS_limited(root:str,goal:str,limit=50):
     """depth first search strategy that limits the maximum depth of the search tree
 
@@ -792,12 +791,13 @@ def st_summary(start:str,goal:str,show=False,output_limit=50,dfs_limit=40):
     st.success("DSF unrestricted")
     st_results(start, goal, DFS, show=show, output_limit=output_limit)
 
-    st.success(f"DFS limited to depth {dfs_limit}")
-    try:
-        st_results(start, goal, DFS_limited, show=show, limit=dfs_limit, output_limit=output_limit)
-    except Exception:
-        st.error(f"unable to find solution with depth limit: {dfs_limit}")
-        
+    #hiding because dfs limited is not valid at the moment
+    #st.success(f"DFS limited to depth {dfs_limit}")
+    #try:
+    #    st_results(start, goal, DFS_limited, show=show, limit=dfs_limit, output_limit=output_limit)
+    #except Exception:
+    #    st.error(f"unable to find solution with depth limit: {dfs_limit}")
+    
     st.success("Uniform cost")
     st_results(start, goal, uniform_cost, show=show, output_limit=output_limit)
 
@@ -905,12 +905,13 @@ def st_compare(start:str,goal:str,strategies:list,output_limit=50,dfs_limit=40,s
         elif strat == "DFS":
             cols[i].success("DSF unrestricted")
             st_compare_result(cols[i],start, goal, DFS, show=show, output_limit=output_limit)
-        elif strat == "DFS limited":
-            cols[i].success(f"DFS limited to depth {dfs_limit}")
-            try:
-                st_compare_result(cols[i],start, goal, DFS_limited, show=show, limit=dfs_limit, output_limit=output_limit)
-            except Exception:
-                cols[i].error(f"unable to find solution with depth limit: {dfs_limit}")
+        #hiding until dfs limited is fixed
+        #elif strat == "DFS limited":
+        #    cols[i].success(f"DFS limited to depth {dfs_limit}")
+        #    try:
+        #        st_compare_result(cols[i],start, goal, DFS_limited, show=show, limit=dfs_limit, output_limit=output_limit)
+        #    except Exception:
+        #        cols[i].error(f"unable to find solution with depth limit: {dfs_limit}")
         elif strat == "Uniform cost":
             cols[i].success("Uniform cost")
             st_compare_result(cols[i],start, goal, uniform_cost, show=show, output_limit=output_limit)
@@ -936,7 +937,7 @@ def st_compare(start:str,goal:str,strategies:list,output_limit=50,dfs_limit=40,s
 
 
 ouput_limit = st.sidebar.select_slider("Output limit",range(101),value=50)
-dfs_limit = st.sidebar.select_slider("DFS depth limit",range(101),value=40)
+#dfs_limit = st.sidebar.select_slider("DFS depth limit",range(101),value=40)
 
 start_option = st.sidebar.radio("Preset start states",["None","Easy","Medium","Hard"])
 goal_option = st.sidebar.radio("Preset goal states",["None","Default"])
@@ -962,15 +963,24 @@ goal = goal.replace(" ","").strip()
 view_option = st.sidebar.radio("Views",["Summary","Compare"])
 
 if view_option == "Summary":
-    if len(start) == 9 and len(goal) == 9:
+    if len(set(start)) != 9 or len(set(goal)) != 9:
+        st.warning("Enter valid state values")
+    elif len(start) == 9 and len(goal) == 9:
         #st_results(s1, g, a_star, h_func=h_dist_cost)
-        st_summary(start,goal,show=True,output_limit=ouput_limit,dfs_limit=dfs_limit)
+        #st_summary(start,goal,show=True,output_limit=ouput_limit,dfs_limit=dfs_limit)
+        st_summary(start,goal,show=True,output_limit=ouput_limit)
+    else:
+        st.warning("Enter valid state values")
 elif view_option == "Compare":
-    strategies = ["BFS","DFS","DFS limited","Uniform cost","Best first with misplaced tiles","Best first with manhattan distance","Best first with modified manhattan distance","a* with misplaced tiles","a* with manhattan distance","a* with modified manhattan distance"]
+    #strategies = ["BFS","DFS","DFS limited","Uniform cost","Best first with misplaced tiles","Best first with manhattan distance","Best first with modified manhattan distance","a* with misplaced tiles","a* with manhattan distance","a* with modified manhattan distance"]
+    strategies = ["BFS","DFS","Uniform cost","Best first with misplaced tiles","Best first with manhattan distance","Best first with modified manhattan distance","a* with misplaced tiles","a* with manhattan distance","a* with modified manhattan distance"]
     search_options = st.sidebar.multiselect("Search strategies",strategies)
-    if not search_options:
+    if len(set(start)) != 9 or len(set(goal)) != 9:
+        st.warning("Enter valid state values")
+    elif not search_options:
         st.warning("Select search strategies")
     elif len(start) == 9 and len(goal) == 9:
-        st_compare(start,goal,search_options,ouput_limit,dfs_limit)
+        #st_compare(start,goal,search_options,ouput_limit,dfs_limit)
+        st_compare(start,goal,search_options,ouput_limit)
     else:
         st.warning("Enter valid state values")
