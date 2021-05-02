@@ -16,37 +16,6 @@ css = """
             #board { display: flex;flex-direction: column;padding: 10px 50px;margin: 10px }
         </style>
         """
-test = f"""
-        <div id="board">
-            <div id="game-board">
-                <div class="row">
-                    <div class="dot"></div>
-                    <div class="horizContainer" data-coord="0,0,0" style="background-color: rgb(255, 255, 255);"></div>
-                    <div class="dot" id="dot0,1"></div>
-                    <div class="horizContainer" style="background-color: rgb(255, 0, 0);"></div>
-                    <div class="dot" id="dot0,2"></div>
-                    <div class="horizContainer" data-coord="0,0,2" style="background-color: rgb(0, 0, 0);"></div>
-                    <div class="dot" id="dot0,3"></div>
-                    <div class="horizContainer" data-coord="0,0,3" style="background-color: rgb(255, 0, 0);"></div>
-                    <div class="dot" id="dot0,4"></div>
-                    <div class="horizContainer" data-coord="0,0,4" style="background-color: rgb(0, 0, 255);"></div>
-                    <div class="dot" id="dot0,5"></div>
-                </div>
-                <div class="row">
-                    <div class="vertContainer" style="background-color: rgb(255, 255, 255);"></div>
-                    <div class="box" style="background-color: rgb(255, 255, 255);"></div>
-                    <div class="vertContainer" data-coord="1,1,0" style="background-color: rgb(0, 0, 255);"></div>
-                    <div class="box" style="background-color: rgba(0, 0, 255, 0.5);"></div>
-                    <div class="vertContainer" style="background-color: rgb(255, 0, 0);"></div>
-                    <div class="box" style="background-color: rgba(255, 0, 0, 0.5);">3</div>
-                    <div class="vertContainer" data-coord="1,3,0" style="background-color: rgb(0, 0, 255);"></div>
-                    <div class="box" id="box0,3" style="background-color: rgba(255, 0, 0, 0.5);"></div>
-                    <div class="vertContainer" data-coord="1,4,0" style="background-color: rgb(0, 0, 255);"></div>
-                    <div class="box" id="box0,4" style="background-color: rgba(0, 0, 255, 0.5);"></div>
-                    <div class="vertContainer" data-coord="1,5,0" style="background-color: rgb(0, 0, 255);"></div></div>
-            </div>
-        </div>
-        """
     
 def hor_row_builder(row_state:str):
     dot = div(_class="dot")
